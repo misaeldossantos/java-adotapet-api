@@ -5,12 +5,14 @@
  */
 package br.com.adotapet.api.vacina;
 
+import br.com.adotapet.api.core.utils.ResponseMessage;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
+import javax.ws.rs.core.Response;
 
 /**
  *
@@ -22,7 +24,7 @@ import java.util.List;
 @Stateless
 public class VacinaResource {
 
-    @PersistenceContext(unitName = "AdotaPet")
+    @PersistenceContext(unitName = "AdotaPetPU")
     private EntityManager entityManager;
 
     @GET
@@ -32,18 +34,27 @@ public class VacinaResource {
     }
 
     @POST
-    public Vacina addVacina(Vacina vacina) {
+    public Response addVacina(Vacina vacina) {
+        Response response = validaVacina(vacina);
+        if(response != null) {
+            return response;
+        }
         entityManager.persist(vacina);
-        return vacina;
+        return Response.ok(vacina).build();
     }
 
     @PUT
     @Path("{id}")
-    public Vacina updateVacina(@PathParam("id") Long id, Vacina vacina) {
+    public Response updateVacina(@PathParam("id") Long id, Vacina vacina) {
+       Response response = validaVacina(vacina);
+       if(response != null) {
+           return response;
+       }
        vacina.setId(id);
        entityManager.merge(vacina);
-       return vacina;
+       return Response.ok(vacina).build();
     }
+
 
     @DELETE
     @Path("{id}")
@@ -54,5 +65,17 @@ public class VacinaResource {
     @GET
     public List<Vacina> getVacinas() {
        return entityManager.createQuery("SELECT l FROM Vacina l", Vacina.class).getResultList();
+    }
+    
+    private Response validaVacina(Vacina vacina) {
+        // Regra de negócio 3: vacina deve ter pelo menos 2 doses
+        if(vacina.getQtdDoses() < 2) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(ResponseMessage.build("A vacina deve ter pelo menos 2 doses", ResponseMessage.Type.ERROR))
+                    .build();
+        }
+        
+        return null;        
     }
 }

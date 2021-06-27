@@ -13,26 +13,26 @@ public class Adocao implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "pets_id", foreignKey = @ForeignKey(name = "fk_adocoes_pets"))
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "pets_id", foreignKey = @ForeignKey(name = "fk_adocoes_pets"), nullable = false)
     private Pet pets;
 
-    @Column()
+    @Column(nullable = false)
     private String nome;
 
-    @Column()
-    private Double telefone;
+    @Column(nullable = false)
+    private String telefone;
 
-    @Column()
+    @Column(nullable = false)
     private String cidade;
 
-    @Column()
+    @Column(nullable = false)
     private String email;
 
     public Adocao() {
     }
 
-    public Adocao(Long id, Pet pets, String nome, Double telefone, String cidade, String email) {
+    public Adocao(Long id, Pet pets, String nome, String telefone, String cidade, String email) {
         this.id = id;
         this.pets = pets;
         this.nome = nome;
@@ -65,11 +65,11 @@ public class Adocao implements Serializable {
         this.nome = nome;
     }
 
-    public Double getTelefone() {
+    public String getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(Double telefone) {
+    public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
 

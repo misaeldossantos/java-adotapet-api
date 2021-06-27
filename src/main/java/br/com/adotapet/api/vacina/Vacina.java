@@ -24,13 +24,13 @@ public class Vacina implements Serializable {
     @Column(nullable = false)
     private String nome;
 
-    @Column(name = "qtd_doses")
-    private LocalDate qtdDoses;
+    @Column(name = "qtd_doses", nullable = false)
+    private Integer qtdDoses;
 
     public Vacina() {
     }
 
-    public Vacina(Long id, String nome, LocalDate qtdDoses) {
+    public Vacina(Long id, String nome, Integer qtdDoses) {
         this.id = id;
         this.nome = nome;
         this.qtdDoses = qtdDoses;
@@ -52,11 +52,11 @@ public class Vacina implements Serializable {
         this.nome = nome;
     }
 
-    public LocalDate getQtdDoses() {
+    public Integer getQtdDoses() {
         return qtdDoses;
     }
 
-    public void setQtdDoses(LocalDate qtdDoses) {
+    public void setQtdDoses(Integer qtdDoses) {
         this.qtdDoses = qtdDoses;
     }
 }

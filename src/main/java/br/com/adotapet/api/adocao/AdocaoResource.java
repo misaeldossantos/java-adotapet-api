@@ -24,7 +24,7 @@ import java.util.List;
 @Stateless
 public class AdocaoResource {
 
-    @PersistenceContext(unitName = "AdotaPet")
+    @PersistenceContext(unitName = "AdotaPetPU")
     private EntityManager entityManager;
 
     @GET

@@ -4,6 +4,7 @@ import br.com.adotapet.api.vacina.Vacina;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.*;
 
@@ -16,27 +17,31 @@ public class Pet implements Serializable {
     private Long id;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private EspecieEnum especie;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private SexoEnum sexo;
 
-    @Column()
+    @Column(nullable = false)
     private String nome;
 
-    @Column(name = "data_nascimento")
+    @Column(name = "data_nascimento", nullable = false)
     private LocalDate dataNascimento;
 
-    @Column()
+    @Column
     private String imagem;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "pets_vacinas",
             joinColumns = @JoinColumn(name = "pet_id"),
-            inverseJoinColumns = @JoinColumn(name = "vacina_id")
+            inverseJoinColumns = @JoinColumn(name = "vacina_id"),
+            foreignKey = @ForeignKey(name = "fk_pet"),
+            inverseForeignKey = @ForeignKey(name = "fk_vacina")
     )
-    private List<Vacina> vacinas;
+    private List<Vacina> vacinasAplicadas = new LinkedList<>();
 
     public Pet() {
     }
@@ -48,7 +53,7 @@ public class Pet implements Serializable {
         this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.imagem = imagem;
-        this.vacinas = vacinas;
+        this.vacinasAplicadas = vacinas;
     }
 
     public Long getId() {
@@ -99,12 +104,13 @@ public class Pet implements Serializable {
         this.imagem = imagem;
     }
 
-    public List<Vacina> getVacinas() {
-        return vacinas;
+    public List<Vacina> getVacinasAplicadas() {
+        return vacinasAplicadas;
     }
 
-    public void setVacinas(List<Vacina> vacinas) {
-        this.vacinas = vacinas;
+    public void setVacinasAplicadas(List<Vacina> vacinasAplicadas) {
+        this.vacinasAplicadas = vacinasAplicadas;
     }
+ 
 }
 

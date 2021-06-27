@@ -1,8 +1,8 @@
 package br.com.adotapet.api.pets;
 
 public enum SexoEnum {
-    MASCULINO("Masculino"),
-    FEMININO("Feminino");
+    MACHO("Macho"),
+    FEMEA("Fêmea");
 
     private String descricao;
 
